@@ -1,9 +1,10 @@
 package org.example;
 
-import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.example.LeaveService;
+import org.junit.jupiter.api.Test;
 
 public class LeaveServiceTest {
 
@@ -43,19 +44,26 @@ public class LeaveServiceTest {
     }
 
     @Test
-    void testFullLeaveWorkflow() {
+    void testFullLeaveWorkflowApproval() {
+
         LeaveService service = new LeaveService();
 
         int totalDays = 20;
         int usedDays = 5;
 
+        // Step 1: Calculate balance
         int balance = service.calculateLeaveBalance(totalDays, usedDays);
+
+        // Step 2: Apply for leave
         String status = service.applyForLeave(3, balance);
+        assertEquals("PENDING", status);
+
+        // Step 3: Manager approves leave
         status = service.approveLeave(status);
 
+        // Step 4: Final verification
         assertEquals("APPROVED", status);
     }
-
     @Test
     void testFullLeaveWorkflowRejection() {
 
